@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Chart from "./components/Chart/Chart";
 
 const GhPolyglot = require("gh-polyglot");
 
@@ -12,13 +13,10 @@ const App: React.FC = () => {
   const [githubUserStats, setGithubUserStats] = useState<Array<githubStats>>(
     []
   );
+  const [username, setUsername] = useState<string>("");
 
-  useEffect(() => {
-    getUserStats();
-  }, []);
-
-  const getUserStats = async () => {
-    const me = new GhPolyglot("leodini");
+  const getUserStats = async (username: string) => {
+    const me = new GhPolyglot(username);
     console.log(me);
     await me.userStats((err: Error, stats: Array<githubStats>) => {
       if (err) {
@@ -33,15 +31,34 @@ const App: React.FC = () => {
     });
   };
 
+  const handleSearch = (e: any) => {
+    e.preventDefault();
+    getUserStats(username);
+  };
+
+  // useEffect(() => {
+  //   getUserStats(username);
+  // }, []);
+
   return (
     <div className="App">
       <h2>github-stats</h2>
+      <form onSubmit={handleSearch}>
+        <input
+          type="text"
+          placeholder="github username"
+          onChange={(e) => setUsername(e.target.value)}
+          value={username}
+        />
+        <button type="submit">buscar</button>
+      </form>
       {githubUserStats &&
-        githubUserStats.map((stat) => (
-          <div className="">
-            <p>{stat.label}</p>
+        githubUserStats.map((stat, i) => (
+          <div key={i}>
+            <p style={{ color: `${stat.color}` }}>{stat.label}</p>
           </div>
         ))}
+      {githubUserStats && <Chart userData={githubUserStats} />}
     </div>
   );
 };
