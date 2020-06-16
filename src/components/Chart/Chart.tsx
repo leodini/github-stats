@@ -2,15 +2,16 @@ import React from "react";
 import { Pie } from "react-chartjs-2";
 
 const Chart = ({ userData }: any) => {
-  const lineChart = userData.length ? ( // 0
+  const pieChart = userData.length ? ( // 0
     <Pie
+      width={600}
       data={{
         labels: userData.map(({ label }: any) => label),
         datasets: [
           {
             data: userData.map(({ value }: any) => value),
             label: "value",
-            borderColor: userData.map(({ color }: any) => color),
+            borderColor: "#ccc",
             backgroundColor: userData.map(({ color }: any) => color),
             fill: true,
           },
@@ -19,7 +20,7 @@ const Chart = ({ userData }: any) => {
     />
   ) : null;
 
-  return <div>{lineChart}</div>;
+  return <div>{pieChart}</div>;
 };
 
 export default Chart;
