@@ -1,8 +1,25 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from "react";
+// import GhPolyglot from "gh-polyglot";
+import logo from "./logo.svg";
+import "./App.css";
 
-function App() {
+const GhPolyglot = require("gh-polyglot");
+
+const App: React.FC = () => {
+  useEffect(() => {
+    const me = new GhPolyglot("leodini");
+    console.log(me);
+    me.userStats((err: Error, stats: Object) => {
+      if (err) {
+        console.error("Error:", err);
+      }
+      console.log(stats);
+    });
+    me.getAllRepos((err: Error, stats: Object) => {
+      console.log(stats);
+    });
+  }, []);
+
   return (
     <div className="App">
       <header className="App-header">
@@ -21,6 +38,6 @@ function App() {
       </header>
     </div>
   );
-}
+};
 
 export default App;
